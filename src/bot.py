@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 from src import responses
 from src import log
+from openai.error import RateLimitError
 
 logger = log.setup_logger(__name__)
 
@@ -60,8 +61,13 @@ async def send_message(message, user_message):
                     await message.followup.send(chunk)
         else:
             await message.followup.send(response)
+    
+    except RateLimitError as rle:
+        await message.followup.send("> **RateLimitError: Trop de messages, on se calme**")
+        logger.exception(f"Error while sending message: {e}")
+    
     except Exception as e:
-        await message.followup.send("> **Error: Something went wrong, please try again later!**")
+        await message.followup.send("> **Erreur: Problèmes techniques ...**")
         logger.exception(f"Error while sending message: {e}")
 
 
