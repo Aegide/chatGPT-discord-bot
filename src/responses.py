@@ -1,18 +1,20 @@
 import openai
 import json
 from asgiref.sync import sync_to_async
+import os
 
 
 def get_config() -> dict:
-    import os
-    # get config.json path
-    config_dir = os.path.abspath(__file__ + "/../../")
-    config_name = 'config.json'
-    config_path = os.path.join(config_dir, config_name)
-
-    with open(config_path, 'r') as f:
-        config = json.load(f)
-
+    # # get config.json path
+    # config_dir = os.path.abspath(__file__ + "/../../")
+    # config_name = 'config.json'
+    # config_path = os.path.join(config_dir, config_name)
+    # with open(config_path, 'r') as f:
+    #     config = json.load(f)
+    config = {}
+    config["discord_bot_token"] = os.environ["DISCORD"]
+    config["openAI_key"] = os.environ["OPENAI"]
+    config["discord_channel_id"] = os.environ["CHANNEL"]
     return config
 
 config = get_config()
